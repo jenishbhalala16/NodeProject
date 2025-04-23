@@ -1,17 +1,17 @@
 const mysql = require("mysql");
 
 const con = mysql.createConnection({
-    host: "localhost",
-    user: "root",
-    password: "",
-    database: "test"
+    host: "bjiyeefxvcrlmjzqzrv2-mysql.services.clever-cloud.com",
+    user: "unpqo7fzbyngsdtr",
+    password: "4Y99pCFS2IgNbWy2fHKG",
+    database: "bjiyeefxvcrlmjzqzrv2"
 });
 
 const productDetails = mysql.createConnection({
-    host: "localhost",
-    user: "root",
-    password: "",
-    database: "test"
+    host: "bjiyeefxvcrlmjzqzrv2-mysql.services.clever-cloud.com",
+    user: "unpqo7fzbyngsdtr",
+    password: "4Y99pCFS2IgNbWy2fHKG",
+    database: "bjiyeefxvcrlmjzqzrv2"
 })
 
 con.connect((error) => {

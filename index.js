@@ -199,7 +199,7 @@ app.get("/favorite", verifyToken, (req,res) => {
   p.discription,
   p.quantity
 FROM favorites c 
-LEFT JOIN productdetails p ON c.productID = p.id 
+LEFT JOIN productdetails p ON c.productID = p.id  
 WHERE c.userID = ?`;
 
       con.query(sql, [userID], (err, result) => { 
@@ -423,8 +423,8 @@ app.delete("/:id", (req,res) => {
 })
 
 
-const port = process.env.PORT || 8000
+// const port = process.env.PORT || 8000
 
-app.listen(port, () => { 
-    console.log("Server listening on port" + port);
-});
+// app.listen(port, () => { 
+//     console.log("Server listening on port" + port);
+// });

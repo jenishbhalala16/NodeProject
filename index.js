@@ -423,8 +423,8 @@ app.delete("/:id", (req,res) => {
 })
 
 
-// const port = process.env.PORT || 8000
+const port = process.env.PORT || 8000
 
-// app.listen(port, () => { 
-//     console.log("Server listening on port" + port);
-// });
+app.listen(port, () => { 
+    console.log("Server listening on port" + port);
+});

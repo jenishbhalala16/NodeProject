@@ -190,7 +190,7 @@ app.get("/favorite", verifyToken, (req,res) => {
       console.log(error);
       return res.status(403).json({ result: "Invalid or expired token" });
     } else { 
-      const sql = `SELECT 
+      const sql = `SELECT  
   c.id AS favItemID,  
   p.id AS productID,
   p.name,

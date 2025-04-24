@@ -1,12 +1,14 @@
+
+require('dotenv').config();
 const express = require("express")
 const con = require("./config")
 const productDetails = require("./config")
 const app = express();
 const jwt = require("jsonwebtoken");
-const e = require("express");
-const { log } = require("console");
 
-const secreteKey = "$!@#&^%#*!$asdbhgwgem#&^%HGJGhdgdflkhGLHG*%@$*JGKhgsdgfkh&^%$#sdfdh"
+
+
+const secreteKey = process.env.JWT_SECRET
 
 app.use(express.json());
 

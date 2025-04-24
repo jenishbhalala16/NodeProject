@@ -1,17 +1,19 @@
+
+require('dotenv').config();
 const mysql = require("mysql");
 
 const con = mysql.createConnection({
-    host: "bjiyeefxvcrlmjzqzrv2-mysql.services.clever-cloud.com",
-    user: "unpqo7fzbyngsdtr",
-    password: "4Y99pCFS2IgNbWy2fHKG",
-    database: "bjiyeefxvcrlmjzqzrv2"
+    host: process.env.DB_HOST,
+    user: process.env.DB_USER,
+    password: process.env.DB_PASS,
+    database: process.env.DB
 });
 
 const productDetails = mysql.createConnection({
-    host: "bjiyeefxvcrlmjzqzrv2-mysql.services.clever-cloud.com",
-    user: "unpqo7fzbyngsdtr",
-    password: "4Y99pCFS2IgNbWy2fHKG",
-    database: "bjiyeefxvcrlmjzqzrv2"
+    host: process.env.DB_HOST,
+    user: process.env.DB_USER,
+    password: process.env.DB_PASS,
+    database: process.env.DB
 })
 
 con.connect((error) => {
@@ -26,6 +28,7 @@ con.connect((error) => {
                 console.log("Query Error:::", error);
             } else {
                 console.log("Result:", result);
+            
             }
 
         });

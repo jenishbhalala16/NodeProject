@@ -18,22 +18,7 @@ const secreteKey = process.env.JWT_SECRET
 app.use(express.json());
 
 
-app.post("/create-order", async (req, res) => {
-  const { amount, currency, receipt } = req.body;
 
-  const options = {
-    amount: amount * 100, 
-    currency,
-    receipt,
-  };
-
-  try {
-    const order = await razorpay.orders.create(options);
-    res.json(order);
-  } catch (err) {
-    res.status(500).json({ error: err.message });
-  }
-});
 
 app.get("/", (req, res) => {
 
@@ -51,7 +36,22 @@ app.get("/", (req, res) => {
 });
 
 
+app.post("/createOrder", async (req, res) => {
+  const { amount, currency, receipt } = req.body;
 
+  const options = {
+    amount: amount * 100, 
+    currency,
+    receipt,
+  };
+
+  try {
+    const order = await razorpay.orders.create(options);
+    res.json(order);
+  } catch (err) {
+    res.status(500).json({ error: err.message });
+  }
+});
 
 // app.get("/home", verifyToken, (req, res) => {
 

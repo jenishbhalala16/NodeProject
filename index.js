@@ -5,12 +5,35 @@ const con = require("./config")
 const productDetails = require("./config")
 const app = express();
 const jwt = require("jsonwebtoken");
+const Razorpay  = require("razorpay");
 
+const razorpay = new Razorpay({
+  key_id: 'rzp_test_uGoq5ADrFTgYRAhk',
+  key_secret: 'FySe2f58UYtg6Hjkj1a5s6clk9B',
+});
 
 
 const secreteKey = process.env.JWT_SECRET
 
 app.use(express.json());
+
+
+app.post("/create-order", async (req, res) => {
+  const { amount, currency, receipt } = req.body;
+
+  const options = {
+    amount: amount * 100, 
+    currency,
+    receipt,
+  };
+
+  try {
+    const order = await razorpay.orders.create(options);
+    res.json(order);
+  } catch (err) {
+    res.status(500).json({ error: err.message });
+  }
+});
 
 app.get("/", (req, res) => {
 
@@ -26,6 +49,8 @@ app.get("/", (req, res) => {
     })
 
 });
+
+
 
 
 // app.get("/home", verifyToken, (req, res) => {

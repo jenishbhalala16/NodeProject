@@ -28,7 +28,7 @@ con.connect((error) => {
                 console.log("Query Error:::", error);
             } else {
                 console.log("Result:", result);
-            
+                console.log("fields:", fields);
             }
 
         });

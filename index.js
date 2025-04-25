@@ -8,8 +8,8 @@ const jwt = require("jsonwebtoken");
 const Razorpay  = require("razorpay");
 
 const razorpay = new Razorpay({
-  key_id: 'rzp_test_uGoq5ADrFTgYRAhk',
-  key_secret: 'FySe2f58UYtg6Hjkj1a5s6clk9B',
+  key_id: process.env.RAZOY_KEY,
+  key_secret: process.env.RAZOR_SECRET,
 });
 
 
@@ -44,7 +44,7 @@ app.post("/createOrder", async (req, res) => {
     currency,
     receipt,
   };
-
+  
   try {
     const order = await razorpay.orders.create(options);
     res.json(order);

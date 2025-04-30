@@ -5,7 +5,9 @@ const con = require("./config")
 const productDetails = require("./config")
 const app = express();
 const jwt = require("jsonwebtoken");
-const Razorpay  = require("razorpay");
+const Razorpay = require("razorpay");
+const axios = require('axios');
+const { log } = require('console');
 
 const razorpay = new Razorpay({
   key_id: process.env.RAZOY_KEY,
@@ -33,6 +35,96 @@ app.get("/", (req, res) => {
 
     })
 
+});
+
+async function generateAccessToken() {
+  const clientId = process.env.PAYPAL_CLIENT_ID;
+  const clientSecret = process.env.PAYPAL_CLIENT_SECRET;
+
+  const auth = Buffer.from(`${clientId}:${clientSecret}`).toString('base64');
+
+  try {
+    const response = await axios.post('https://api-m.sandbox.paypal.com/v1/oauth2/token', 
+      'grant_type=client_credentials', 
+      {
+        headers: {
+          'Authorization': `Basic ${auth}`,
+          'Content-Type': 'application/x-www-form-urlencoded'
+        }
+      }
+    );
+
+    return response.data.access_token;
+  } catch (error) {
+    console.error('Error generating access token:', error.response.data);
+  
+  }
+}
+
+
+// Create an Order
+app.get('/createOrderPaypal', async (req, res) => {
+  const accessToken = await generateAccessToken();
+
+  log("ACCESSTOKEN:::" + accessToken);
+
+  try {
+    const order = await axios.post(`${process.env.PAYPAL_API}/v2/checkout/orders`, 
+      {
+        intent: 'CAPTURE',
+        application_context: {
+          return_url: 'http://192.168.11.128:3000/paypal-success',  // <-- After successful payment
+          cancel_url: 'http://192.168.11.128:3000/paypal-cancel'    // <-- After cancellation
+        },
+        purchase_units: [
+          {
+            amount: {
+              currency_code: 'USD',
+              value: '180.00'  // Example price
+            }
+          }
+        ]
+      }, 
+      {
+        headers: {
+          Authorization: `Bearer ${accessToken}`,
+          'Content-Type': 'application/json'
+        }
+      }
+    );
+    res.json(order.data);
+  } catch (error) {
+    console.error('Error creating order:', error.response.message);
+    res.json(error.response.message);
+  }
+});
+
+
+app.get('/paypal-success', (req, res) => {
+  res.send('Payment Successful! Thank you.');
+});
+
+app.get('/paypal-cancel', (req, res) => {
+  res.send('Payment Cancelled.');
+});
+
+
+app.post('/capture-order', async (req, res) => {
+  const { orderID } = req.body;
+  const accessToken = await generateAccessToken();
+
+  try {
+    const capture = await axios.post(`${process.env.PAYPAL_API}/v2/checkout/orders/${orderID}/capture`, {}, {
+      headers: {
+        Authorization: `Bearer ${accessToken}`,
+        'Content-Type': 'application/json'
+      }
+    });
+    res.json(capture.data);
+  } catch (error) {
+    console.error('Error capturing order:', error.response.data);
+    res.json(error.response.data);
+  }
 });
 
 

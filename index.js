@@ -171,7 +171,7 @@ app.post("/createOrder", async (req, res) => {
 app.get("/home", verifyToken, (req, res) => {
   jwt.verify(req.token, secreteKey, (error, authData) => {
     if (error) {
-      return res.status(403).json({ result: "Invalid or expired token" });
+      return res.json({ result: "Invalid or expired token" });
     }
 
     const userID = authData.id;
